@@ -1,0 +1,25 @@
+{
+  "name": "cse341-final",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkanderson2024/cse341-final.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mkanderson2024/cse341-final/issues"
+  },
+  "homepage": "https://github.com/mkanderson2024/cse341-final#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "epxress": "^0.0.1-security"
+  }
+}
