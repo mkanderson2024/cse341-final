@@ -20,10 +20,6 @@
   "homepage": "https://github.com/mkanderson2024/cse341-final#readme",
   "dependencies": {
     "dotenv": "^17.2.3",
-    "epxress": "^0.0.1-security",
-    "swagger-ui-express": "^5.0.1"
-  },
-  "devDependencies": {
-    "swagger-autogen": "^2.23.7"
+    "express": "^5.1.0"
   }
 }
