@@ -1,5 +1,5 @@
 const mongodb = require("./config/db");
-const { ObjectId } = require('mongobd');
+const { ObjectId } = require('mongodb');
 
 const collectionName = 'users';//Here I assume the collection name will be 'users'. Change accordingly if necessary!
 
@@ -19,7 +19,7 @@ const getAllUsers = async (req, res) => {
 
 //GET user by ID
 //handling error codes (400, 404, 500, 200)
-const getUserById = async (res, req) => {
+const getUserById = async (req, res) => {
     
     try {
         const userId = req.params.userId;
@@ -44,8 +44,14 @@ const getUserById = async (res, req) => {
 };
 
 //POST create a new user
-const createUser = async (res, req) => {
+const createUser = async (req, res) => {
     try {
+
+        //validate required fields
+        if (!req.body.email || !req.body.password || !req.body.type) {
+            
+            return res.status(400).json({ message: "Some Required fields missing: email, password or type" });
+        }
         const user = {//assuming user will have all those fields
             
             type: req.body.type, //buyer or seller
@@ -61,8 +67,8 @@ const createUser = async (res, req) => {
         const db = mongodb.getDb();
         const result = await db.collection(collectionName).insertOne(user);
 
-        if (result.acknowledge) {
-            res.status(201).jason({ message: "New user created successfuly!", userId: result.insertedId });
+        if (result.acknowledged) {
+            res.status(201).json({ message: "New user created successfuly!", userId: result.insertedId });
         } else {
             res.status(500).json({ message: 'Failed to create a new user' });
         }
@@ -75,7 +81,7 @@ const createUser = async (res, req) => {
 
 //PUT update user
 
-const updateUser = async (res, req) => {
+const updateUser = async (req, res) => {
     
     try {
         const userId = req.params.userId;
@@ -114,9 +120,9 @@ const updateUser = async (res, req) => {
     
 };
 
-//DELETE use
+//DELETE user
 
-const deleteUser = async (res, req) => {
+const deleteUser = async (req, res) => {
     
    try {
     const userId = req.params.userId;

@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/books', require('./routes/bookRoutes'));
 // app.use('/audio-books', require('./routes/audioBookRoutes'));
-// app.use('/user', require('./routes/userRoutes'));
+app.use('/user', require('./routes/userRoutes'));
 // app.use('/orders', require('./routes/orderRoutes'));
 
 // 404 handler
