@@ -46,16 +46,16 @@ const audioBookValidationRules = () => {
     body("publishedDate")
       .notEmpty()
       .withMessage("Published date field cannot be empty")
-      .isISO8601()
-      .withMessage("Published date must be a valid date"),
+      .matches(/^\d{4}-\d{2}-\d{2}$/)
+      .withMessage("Published date must be in YYYY-MM-DD format"),
     body("description")
       .notEmpty()
       .withMessage("Description field cannot be empty"),
     body("time")
       .notEmpty()
       .withMessage("Time field cannot be empty")
-      .isNumeric()
-      .withMessage("Time must be a number"),
+      .matches(/^([01]\d|2[0-3]):([0-5]\d)$/)
+      .withMessage("Time must be in hh:mm format"),
     body("inStock")
       .notEmpty()
       .withMessage("In stock field cannot be empty")
