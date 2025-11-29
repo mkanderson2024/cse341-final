@@ -181,7 +181,7 @@
         }
       }
     },
-    "/audio/": {
+    "/audio-books/": {
       "get": {
         "description": "",
         "responses": {
@@ -252,7 +252,7 @@
         }
       }
     },
-    "/audio/{audioId}": {
+    "/audio-books/{audioId}": {
       "get": {
         "description": "",
         "parameters": [
