@@ -217,22 +217,7 @@
                 "genre": {
                   "example": "any"
                 },
-                "isbn": {
-                  "example": "any"
-                },
-                "price": {
-                  "example": "any"
-                },
-                "publishedDate": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                },
                 "time": {
-                  "example": "any"
-                },
-                "inStock": {
                   "example": "any"
                 }
               }
@@ -308,22 +293,10 @@
                 "genre": {
                   "example": "any"
                 },
-                "isbn": {
-                  "example": "any"
-                },
-                "price": {
-                  "example": "any"
-                },
-                "publishedDate": {
-                  "example": "any"
-                },
-                "description": {
+                "audioFormat": {
                   "example": "any"
                 },
                 "time": {
-                  "example": "any"
-                },
-                "inStock": {
                   "example": "any"
                 }
               }
