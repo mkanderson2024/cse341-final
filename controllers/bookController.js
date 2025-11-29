@@ -44,16 +44,10 @@ const createBook = async (req, res) => {
     const book = {
       title: req.body.title,
       author: req.body.author,
-      publisher: req.body.publisher,
+      pages: req.body.pages,
       genre: req.body.genre,
-      isbn: req.body.isbn,
-      price: req.body.price,
-      publishedDate: req.body.publishedDate,
-      description: req.body.description,
-      pageCount: req.body.pageCount,
-      inStock: req.body.inStock ?? true,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      printType: req.body.printType, // Paper, Hardback, or Digital
+      publisher: req.body.publisher
     };
 
     const db = mongodb.getDb();
@@ -85,15 +79,10 @@ const updateBook = async (req, res) => {
     const updatedBook = {
       title: req.body.title,
       author: req.body.author,
-      publisher: req.body.publisher,
+      pages: req.body.pages,
       genre: req.body.genre,
-      isbn: req.body.isbn,
-      price: req.body.price,
-      publishedDate: req.body.publishedDate,
-      description: req.body.description,
-      pageCount: req.body.pageCount,
-      inStock: req.body.inStock,
-      updatedAt: new Date()
+      printType: req.body.printType, // Paper, Hardback, or Digital
+      publisher: req.body.publisher
     };
 
     const db = mongodb.getDb();
