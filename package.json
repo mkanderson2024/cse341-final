@@ -23,7 +23,7 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "express-validate": "^0.0.8",
+    "express-validator": "^7.3.1",
     "mongodb": "^7.0.0",
     "nodemon": "^3.1.10"
   }
