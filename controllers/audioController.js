@@ -1,7 +1,7 @@
 const mongodb = require('../config/db');
 const { ObjectId } = require('mongodb');
 
-const collectionName = 'audio'; // Replace with actual collection name
+const collectionName = 'audioBook';
 
 // GET all audiobooks
 const getAllAudio = async (req, res) => {
