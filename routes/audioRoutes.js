@@ -13,10 +13,10 @@ router.get('/', audioController.getAllAudio);
 router.get('/:audioId', audioController.getAudioById);
 
 // POST create new audiobook
-router.post('/', audioBookValidationRules, ValidationAudioBook, audioController.createAudio);
+router.post('/', audioBookValidationRules(), ValidationAudioBook, audioController.createAudio);
 
 // PUT update audiobook by ID
-router.put('/:audioId', audioBookValidationRules, ValidationAudioBook, audioController.updateAudio);
+router.put('/:audioId', audioBookValidationRules(), ValidationAudioBook, audioController.updateAudio);
 
 // DELETE audiobook by ID
 router.delete('/:audioId', audioController.deleteAudio);

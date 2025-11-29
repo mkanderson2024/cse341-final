@@ -6,18 +6,18 @@ const audioBookValidationRules = () => {
     body("title")
       .notEmpty()
       .withMessage("Title field cannot be empty")
-      .isLength({ min: 10 })
-      .withMessage("Title must be at least 10 characters long"),
+      .isLength({ min: 2 })
+      .withMessage("Title must be at least 2 characters long"),
     body("author")
       .notEmpty()
       .withMessage("Author field cannot be empty")
-      .isLength({ min: 10 })
-      .withMessage("Author must be at least 10 characters long"),
-    body("VoiceActor")
+      .isLength({ min: 2 })
+      .withMessage("Author must be at least 2 characters long"),
+    body("voiceActor")
       .notEmpty()
       .withMessage("Actor field cannot be empty")
-      .isLength({ min: 10 })
-      .withMessage("Actor must be at least 10 characters long"),
+      .isLength({ min: 2 })
+      .withMessage("Actor must be at least 2 characters long"),
     body("recordingStudio")
       .notEmpty()
       .withMessage("Recording studio field cannot be empty")
