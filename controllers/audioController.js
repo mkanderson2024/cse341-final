@@ -82,7 +82,8 @@ const updateAudio = async (req, res) => {
         voiceActor: req.body.voiceActor,
         recordingStudio: req.body.recordingStudio,
         genre: req.body.genre,
-        time: req.body.time,
+        audioFormat: req.body.audioFormat,
+        time: req.body.time
     };
 
     const db = mongodb.getDb();
