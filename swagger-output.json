@@ -217,6 +217,9 @@
                 "genre": {
                   "example": "any"
                 },
+                "audioFormat": {
+                  "example": "any"
+                },
                 "time": {
                   "example": "any"
                 }
