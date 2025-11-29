@@ -2,7 +2,7 @@
   "name": "cse341-final",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +21,8 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "mongodb": "^7.0.0"
+    "mongodb": "^7.0.0",
+    "mongoose": "^9.0.0",
+    "swagger-ui-express": "^5.0.1"
   }
 }
