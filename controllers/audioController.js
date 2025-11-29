@@ -47,14 +47,7 @@ const createAudio = async (req, res) => {
         voiceActor: req.body.voiceActor,
         recordingStudio: req.body.recordingStudio,
         genre: req.body.genre,
-        isbn: req.body.isbn,
-        price: req.body.price,
-        publishedDate: req.body.publishedDate,
-        description: req.body.description,
         time: req.body.time,
-        inStock: req.body.inStock ?? true,
-        createdAt: new Date(),
-        updatedAt: new Date()
     };
 
     const db = mongodb.getDb();
@@ -89,13 +82,7 @@ const updateAudio = async (req, res) => {
         voiceActor: req.body.voiceActor,
         recordingStudio: req.body.recordingStudio,
         genre: req.body.genre,
-        isbn: req.body.isbn,
-        price: req.body.price,
-        publishedDate: req.body.publishedDate,
-        description: req.body.description,
         time: req.body.time,
-        inStock: req.body.inStock ?? true,
-        updatedAt: new Date()
     };
 
     const db = mongodb.getDb();
