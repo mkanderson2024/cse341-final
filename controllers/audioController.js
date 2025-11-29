@@ -47,6 +47,7 @@ const createAudio = async (req, res) => {
         voiceActor: req.body.voiceActor,
         recordingStudio: req.body.recordingStudio,
         genre: req.body.genre,
+        audioFormat: req.body.audioFormat,
         time: req.body.time,
     };
 
