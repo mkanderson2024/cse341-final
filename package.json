@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
@@ -23,6 +22,7 @@
   "homepage": "https://github.com/mkanderson2024/cse341-final#readme",
   "dependencies": {
     "dotenv": "^17.2.3",
+    "expres": "^0.0.5",
     "express": "^5.1.0",
     "express-validate": "^0.0.8",
     "mongodb": "^7.0.0",
