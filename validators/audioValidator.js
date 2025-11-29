@@ -28,39 +28,16 @@ const audioBookValidationRules = () => {
       .withMessage("Genre field cannot be empty")
       .isLength({ min: 1 })
       .withMessage("Genre must be at least 1 character long"),
-    body("isbn")
-      .notEmpty()
-      .withMessage("ISBN field cannot be empty")
-      .isISBN()
-      .withMessage("ISBN must be a valid ISBN"),
     body("audioFormat")
       .notEmpty()
       .withMessage("Format field cannot be empty")
       .isIn(["mp3", "aac", "wav"])
       .withMessage("Format must be one of mp3, aac, wav"),
-    body("price")
-      .notEmpty()
-      .withMessage("Price field cannot be empty")
-      .isFloat()
-      .withMessage("Price must be a valid number"),
-    body("publishedDate")
-      .notEmpty()
-      .withMessage("Published date field cannot be empty")
-      .matches(/^\d{4}-\d{2}-\d{2}$/)
-      .withMessage("Published date must be in YYYY-MM-DD format"),
-    body("description")
-      .notEmpty()
-      .withMessage("Description field cannot be empty"),
     body("time")
       .notEmpty()
       .withMessage("Time field cannot be empty")
       .matches(/^([01]\d|2[0-3]):([0-5]\d)$/)
       .withMessage("Time must be in hh:mm format"),
-    body("inStock")
-      .notEmpty()
-      .withMessage("In stock field cannot be empty")
-      .isBoolean()
-      .withMessage("In stock must be true or false"),
   ];
 };
 
