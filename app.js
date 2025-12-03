@@ -18,16 +18,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Home route
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Da Book Store API' });
-});
+// Swagger documentation
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger-output.json');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Routes
-app.use('/books', require('./routes/bookRoutes'));
-// app.use('/audio-books', require('./routes/audioBookRoutes'));
-app.use('/user', require('./routes/userRoutes'));
-// app.use('/orders', require('./routes/orderRoutes'));
+// Home route
+app.use('/', require('./routes/index'));
 
 // 404 handler
 app.use((req, res) => {
