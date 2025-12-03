@@ -4,11 +4,16 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node app.js",
     "dev": "nodemon app.js",
     "swagger": "node ./swagger.js"
   },
+
+  "jest":{
+    "testEnvironment": "node"
+  },
+  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mkanderson2024/cse341-final.git"
@@ -34,6 +39,8 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4",
     "swagger-autogen": "^2.23.7"
   }
 }

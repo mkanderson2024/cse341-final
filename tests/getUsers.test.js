@@ -1,12 +1,14 @@
-/*const request = require("supertest");
+const request = require("supertest");
 const app = require("../app");
 
-// Indicates jest to use db mocked
-jest.mock("../config/db");
+// Indicates Jest to use db mocked instead of the real db
+const request = require("supertest");
+const app = require("../app");
 
-describe("GET /user", () => {
+  jest.mock("../config/db");
 
-  it("should return a list of users with status 200", async () => {
+  describe("GET /user", () => {
+    it("should return a list of users with status 200", async () => {
     const response = await request(app).get("/user");
 
     expect(response.statusCode).toBe(200);
@@ -14,5 +16,4 @@ describe("GET /user", () => {
     expect(response.body.length).toBeGreaterThan(0);
     expect(response.body[0]).toHaveProperty("name");
   });
-
-});*/
+});

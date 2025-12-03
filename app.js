@@ -37,6 +37,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Internal server error', error: err.message });
 });
 
+////////////////START SERVER & DB ////////////////// This part must transformed in comments
 // Initialize DB and start server
 mongodb.initDb((err) => {
   if (err) {
@@ -47,3 +48,7 @@ mongodb.initDb((err) => {
     console.log(`Server running on port ${PORT}`);
   });
 });
+/////////////////////////////////////////////////////
+//Line of code must be inserted
+//the app ill be imported by Jest and Supertest 
+module.exports = app;
