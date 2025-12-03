@@ -22,11 +22,15 @@
   },
   "homepage": "https://github.com/mkanderson2024/cse341-final#readme",
   "dependencies": {
+    "connect-mongo": "^6.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-session": "^1.18.2",
     "express-validator": "^7.3.1",
     "mongodb": "^7.0.0",
     "nodemon": "^3.1.10",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
