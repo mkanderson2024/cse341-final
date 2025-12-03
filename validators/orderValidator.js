@@ -58,33 +58,37 @@ const createOrderValidation = [
     .withMessage('Each Book ID must be a valid MongoDB ObjectId')
 ];
 
-// Validation rules for updating an order
+// Validation rules for updating an order (all fields required)
 const updateOrderValidation = [
   param('orderId')
     .isMongoId()
     .withMessage('Order ID must be a valid MongoDB ObjectId'),
 
   body('userId')
-    .optional()
     .trim()
+    .notEmpty()
+    .withMessage('User ID is required')
     .isMongoId()
     .withMessage('User ID must be a valid MongoDB ObjectId'),
 
   body('shippingAddress')
-    .optional()
     .trim()
+    .notEmpty()
+    .withMessage('Shipping address is required')
     .isLength({ min: 10, max: 500 })
     .withMessage('Shipping address must be between 10 and 500 characters'),
 
   body('date')
-    .optional()
+    .notEmpty()
+    .withMessage('Date is required')
     .isISO8601()
     .withMessage('Date must be a valid ISO 8601 date format')
     .toDate(),
 
   body('paymentMethod')
-    .optional()
     .trim()
+    .notEmpty()
+    .withMessage('Payment method is required')
     .isIn(['Credit Card', 'Debit Card', 'PayPal', 'Cash on Delivery'])
     .withMessage('Payment method must be one of: Credit Card, Debit Card, PayPal, Cash on Delivery'),
 
@@ -97,12 +101,10 @@ const updateOrderValidation = [
     .withMessage('Tracking number must contain only letters and numbers'),
 
   body('bookIds')
-    .optional()
     .isArray({ min: 1 })
     .withMessage('Book IDs must be an array with at least one book'),
 
   body('bookIds.*')
-    .optional()
     .isMongoId()
     .withMessage('Each Book ID must be a valid MongoDB ObjectId')
 ];
