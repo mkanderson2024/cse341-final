@@ -2,7 +2,7 @@
   "name": "cse341-final",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "jest",
     "start": "node app.js",
@@ -10,10 +10,6 @@
     "swagger": "node ./swagger.js"
   },
 
-  "jest":{
-    "testEnvironment": "node"
-  },
-  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mkanderson2024/cse341-final.git"

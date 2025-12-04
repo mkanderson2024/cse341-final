@@ -1,4 +1,4 @@
-const mongodb = require("./config/db");
+const mongodb = require("../config/db");
 const { ObjectId } = require('mongodb');
 
 const collectionName = 'users';//Here I assume the collection name will be 'users'. Change accordingly if necessary!

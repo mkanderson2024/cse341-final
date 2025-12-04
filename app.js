@@ -1,10 +1,9 @@
 const express = require('express');
-const mongodb = require('./config/db');
-
+//const mongodb = require('./config/db');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+//const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -19,10 +18,11 @@ app.use((req, res, next) => {
 });
 
 // Swagger documentation
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger-output.json');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
+if (process.env.NODE_ENV !== "test") {
+  const swaggerUi = require('swagger-ui-express');
+  const swaggerDocument = require('./swagger-output.json');
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
 // Home route
 app.use('/', require('./routes/index'));
 
@@ -39,7 +39,7 @@ app.use((err, req, res, next) => {
 
 ////////////////START SERVER & DB ////////////////// This part must transformed in comments
 // Initialize DB and start server
-mongodb.initDb((err) => {
+/*mongodb.initDb((err) => {
   if (err) {
     console.error('Failed to connect to database:', err);
     process.exit(1);
@@ -47,7 +47,7 @@ mongodb.initDb((err) => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
-});
+});*/
 /////////////////////////////////////////////////////
 //Line of code must be inserted
 //the app ill be imported by Jest and Supertest 

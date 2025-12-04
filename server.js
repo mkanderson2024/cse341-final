@@ -1,6 +1,6 @@
 //Server.js created to separate: starting the server
 //I will keep the code commented
-/*
+
 const app = require('./app');
 const mongodb = require('./config/db');
 
@@ -15,7 +15,3 @@ mongodb.initDb((err) => {
     console.log(`Server running on port ${PORT}`);
   });
 });
-
-
-
-*/
