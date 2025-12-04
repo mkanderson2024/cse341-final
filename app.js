@@ -1,9 +1,12 @@
 const express = require('express');
-//const mongodb = require('./config/db');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const passport = require('./config/passport');
 require('dotenv').config();
 
 const app = express();
-//const PORT = process.env.PORT || 3000;
+
+app.set('trust proxy', 1); // trust proxy for render
 
 // Middleware
 app.use(express.json());
@@ -17,14 +20,35 @@ app.use((req, res, next) => {
   next();
 });
 
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    collectionName: 'sessions',
+    ttl: 14 * 24 * 60 * 60 // 14 days
+  }),
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
+  }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Swagger documentation
 if (process.env.NODE_ENV !== "test") {
   const swaggerUi = require('swagger-ui-express');
   const swaggerDocument = require('./swagger-output.json');
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
-// Home route
+// Routes
 app.use('/', require('./routes/index'));
+app.use('/auth', require('./routes/authRoutes'));
 
 // 404 handler
 app.use((req, res) => {
