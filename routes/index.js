@@ -6,8 +6,8 @@ router.get('/', (req, res) => {
 
 router.use('/books', require('./bookRoutes'));
 router.use('/audio-books', require('./audioRoutes'));
-// router.use('/users', require('./userRoutes'));
 router.use('/orders', require('./orderRoutes'));
+router.use('/user', require('./userRoutes'));
 
 
 module.exports = router;
