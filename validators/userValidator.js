@@ -1,48 +1,45 @@
 const { body, validationResult } = require("express-validator");
 
 // Validator for Audio Book data
-const audioBookValidationRules = () => {
+const userValidationRules = () => {
   return [
-    body("title")
+    body("type")
       .notEmpty()
-      .withMessage("Title field cannot be empty")
-      .isLength({ min: 2 })
-      .withMessage("Title must be at least 2 characters long"),
-    body("author")
+      .withMessage("Type field cannot be empty")
+      .isIn(["buyer", "seller"])
+      .withMessage(`Account type must be either "buyer" or "seller"`),
+    body("email")
       .notEmpty()
-      .withMessage("Author field cannot be empty")
-      .isLength({ min: 2 })
-      .withMessage("Author must be at least 2 characters long"),
-    body("voiceActor")
+      .withMessage("Email field cannot be empty")
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("Email must be a valid email address"),
+    body("phone")
       .notEmpty()
-      .withMessage("Actor field cannot be empty")
-      .isLength({ min: 2 })
-      .withMessage("Actor must be at least 2 characters long"),
-    body("recordingStudio")
+      .withMessage("Phone number field cannot be empty")
+      .isLength({ min: 10 })
+      .withMessage("Phone number must be at least 10 characters long")
+      .isNumeric()
+      .withMessage("Please enter only numbers for the phone number"),
+    body("address")
       .notEmpty()
-      .withMessage("Recording studio field cannot be empty")
-      .isLength({ min: 3 })
-      .withMessage("Recording studio must be at least 3 characters long"),
-    body("genre")
+      .withMessage("Address field cannot be empty") 
+      .isLength({ min: 10 })
+      .withMessage("Address must be at least 10 characters long"),
+    body("password")
       .notEmpty()
-      .withMessage("Genre field cannot be empty")
-      .isLength({ min: 1 })
-      .withMessage("Genre must be at least 1 character long"),
-    body("audioFormat")
-      .notEmpty()
-      .withMessage("Format field cannot be empty")
-      .isIn(["mp3", "aac", "wav"])
-      .withMessage("Format must be one of mp3, aac, wav"),
-    body("time")
-      .notEmpty()
-      .withMessage("Time field cannot be empty")
-      .matches(/^([01]\d|2[0-3]):([0-5]\d)$/)
-      .withMessage("Time must be in hh:mm format"),
+      .withMessage("Please enter a valid password")
+      .isLength({ min: 8 })
+      .withMessage("Password must be at least 8 characters long")
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+      .withMessage(
+        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"
+      ),
   ];
 };
 
 // Middleware to ValidationAudioBook request body
-const ValidationAudioBook = (req, res, next) => {
+const validateUser = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res
@@ -55,6 +52,6 @@ const ValidationAudioBook = (req, res, next) => {
 // Export the validator middleware
 
 module.exports = {
-  audioBookValidationRules,
-  ValidationAudioBook,
+    userValidationRules,
+    validateUser
 };
