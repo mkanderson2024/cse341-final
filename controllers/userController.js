@@ -46,7 +46,6 @@ const getUserById = async (req, res) => {
 //POST create a new user
 const createUser = async (req, res) => {
     try {
-
         //validate required fields
         if (!req.body.email || !req.body.password || !req.body.type) {
             
