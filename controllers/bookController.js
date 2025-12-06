@@ -40,6 +40,7 @@ const getBookById = async (req, res) => {
 
 // POST create new book
 const createBook = async (req, res) => {
+  // #swagger.security = [{ "oauth2": [] }]
   try {
     const book = {
       title: req.body.title,
@@ -69,6 +70,7 @@ const createBook = async (req, res) => {
 
 // PUT update book by ID
 const updateBook = async (req, res) => {
+  // #swagger.security = [{ "oauth2": [] }]
   try {
     const bookId = req.params.bookId;
     
@@ -104,6 +106,7 @@ const updateBook = async (req, res) => {
 
 // DELETE book by ID
 const deleteBook = async (req, res) => {
+  // #swagger.security = [{ "oauth2": [] }]
   try {
     const bookId = req.params.bookId;
     
