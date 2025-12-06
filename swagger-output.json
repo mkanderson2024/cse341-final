@@ -1,19 +1,17 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "My API",
-    "description": "Description",
+    "title": "Da Book Store API",
+    "description": "API Documentation for Da Book Store - CSE 341 Final Project for Team 5",
     "version": "1.0.0"
   },
   "host": "cse341-final-56l4.onrender.com",
   "basePath": "/",
-  "schemes": [
-    "https"
-  ],
+  "schemes": ["https"],
   "paths": {
     "/": {
       "get": {
-        "description": "",
+        "description": "Welcome endpoint for the API",
         "responses": {
           "200": {
             "description": "OK"
@@ -23,7 +21,8 @@
     },
     "/books/": {
       "get": {
-        "description": "",
+        "tags": ["Books"],
+        "description": "Retrieve all books",
         "responses": {
           "200": {
             "description": "OK"
@@ -34,7 +33,8 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": ["Books"],
+        "description": "Create a new book",
         "parameters": [
           {
             "name": "body",
@@ -43,22 +43,22 @@
               "type": "object",
               "properties": {
                 "title": {
-                  "example": "any"
+                  "example": "Harry Potter and the Philosopher's Stone"
                 },
                 "author": {
-                  "example": "any"
+                  "example": "J.K. Rowling"
                 },
                 "pages": {
-                  "example": "any"
+                  "example": 223
                 },
                 "genre": {
-                  "example": "any"
+                  "example": "Fantasy"
                 },
                 "printType": {
-                  "example": "any"
+                  "example": "Paperback"
                 },
                 "publisher": {
-                  "example": "any"
+                  "example": "Bloomsbury"
                 }
               }
             }
@@ -82,7 +82,8 @@
     },
     "/books/{bookId}": {
       "get": {
-        "description": "",
+        "tags": ["Books"],
+        "description": "Retrieve a specific book by ID",
         "parameters": [
           {
             "name": "bookId",
@@ -107,7 +108,8 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Books"],
+        "description": "Update a specific book by ID",
         "parameters": [
           {
             "name": "bookId",
@@ -122,22 +124,22 @@
               "type": "object",
               "properties": {
                 "title": {
-                  "example": "any"
+                  "example": "Harry Potter and the Chamber of Secrets"
                 },
                 "author": {
-                  "example": "any"
+                  "example": "J.K. Rowling"
                 },
                 "pages": {
-                  "example": "any"
+                  "example": 341
                 },
                 "genre": {
-                  "example": "any"
+                  "example": "Fantasy"
                 },
                 "printType": {
-                  "example": "any"
+                  "example": "Hardcover"
                 },
                 "publisher": {
-                  "example": "any"
+                  "example": "Bloomsbury"
                 }
               }
             }
@@ -162,7 +164,8 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": ["Books"],
+        "description": "Delete a specific book by ID",
         "parameters": [
           {
             "name": "bookId",
@@ -192,7 +195,8 @@
     },
     "/audio-books/": {
       "get": {
-        "description": "",
+        "tags": ["Audio Books"],
+        "description": "Retrieve all audio books",
         "responses": {
           "200": {
             "description": "OK"
@@ -203,7 +207,8 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": ["Audio Books"],
+        "description": "Create a new audio book",
         "parameters": [
           {
             "name": "body",
@@ -212,25 +217,25 @@
               "type": "object",
               "properties": {
                 "title": {
-                  "example": "any"
+                  "example": "The Hobbit"
                 },
                 "author": {
-                  "example": "any"
+                  "example": "J.R.R. Tolkien"
                 },
                 "voiceActor": {
-                  "example": "any"
+                  "example": "Rob Inglis"
                 },
                 "recordingStudio": {
-                  "example": "any"
+                  "example": "BBC"
                 },
                 "genre": {
-                  "example": "any"
+                  "example": "Fantasy"
                 },
                 "audioFormat": {
-                  "example": "any"
+                  "example": "MP3"
                 },
                 "time": {
-                  "example": "any"
+                  "example": "11:30:00"
                 }
               }
             }
@@ -254,7 +259,8 @@
     },
     "/audio-books/{audioId}": {
       "get": {
-        "description": "",
+        "tags": ["Audio Books"],
+        "description": "Retrieve a specific audio book by ID",
         "parameters": [
           {
             "name": "audioId",
@@ -279,7 +285,8 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Audio Books"],
+        "description": "Update a specific audio book by ID",
         "parameters": [
           {
             "name": "audioId",
@@ -294,25 +301,25 @@
               "type": "object",
               "properties": {
                 "title": {
-                  "example": "any"
+                  "example": "The Lord of the Rings"
                 },
                 "author": {
-                  "example": "any"
+                  "example": "J.R.R. Tolkien"
                 },
                 "voiceActor": {
-                  "example": "any"
+                  "example": "Rob Inglis"
                 },
                 "recordingStudio": {
-                  "example": "any"
+                  "example": "BBC"
                 },
                 "genre": {
-                  "example": "any"
+                  "example": "Fantasy"
                 },
                 "audioFormat": {
-                  "example": "any"
+                  "example": "MP3"
                 },
                 "time": {
-                  "example": "any"
+                  "example": "12:00:00"
                 }
               }
             }
@@ -337,7 +344,8 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": ["Audio Books"],
+        "description": "Delete a specific audio book by ID",
         "parameters": [
           {
             "name": "audioId",
@@ -367,7 +375,8 @@
     },
     "/orders/": {
       "get": {
-        "description": "",
+        "tags": ["Orders"],
+        "description": "Retrieve all orders",
         "responses": {
           "200": {
             "description": "OK"
@@ -378,7 +387,8 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": ["Orders"],
+        "description": "Create a new order",
         "parameters": [
           {
             "name": "body",
@@ -387,22 +397,22 @@
               "type": "object",
               "properties": {
                 "userId": {
-                  "example": "any"
+                  "example": "user123"
                 },
                 "shippingAddress": {
-                  "example": "any"
+                  "example": "123 Main St, City, State"
                 },
                 "date": {
-                  "example": "any"
+                  "example": "2023-10-01"
                 },
                 "paymentMethod": {
-                  "example": "any"
+                  "example": "Credit Card"
                 },
                 "trackingNumber": {
-                  "example": "any"
+                  "example": "TRACK123"
                 },
                 "bookIds": {
-                  "example": "any"
+                  "example": ["book1", "book2"]
                 }
               }
             }
@@ -420,7 +430,8 @@
     },
     "/orders/{orderId}": {
       "get": {
-        "description": "",
+        "tags": ["Orders"],
+        "description": "Retrieve a specific order by ID",
         "parameters": [
           {
             "name": "orderId",
@@ -445,7 +456,8 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Orders"],
+        "description": "Update a specific order by ID",
         "parameters": [
           {
             "name": "orderId",
@@ -460,22 +472,22 @@
               "type": "object",
               "properties": {
                 "userId": {
-                  "example": "any"
+                  "example": "user456"
                 },
                 "shippingAddress": {
-                  "example": "any"
+                  "example": "456 Elm St, City, State"
                 },
                 "date": {
-                  "example": "any"
+                  "example": "2023-10-02"
                 },
                 "paymentMethod": {
-                  "example": "any"
+                  "example": "PayPal"
                 },
                 "trackingNumber": {
-                  "example": "any"
+                  "example": "TRACK456"
                 },
                 "bookIds": {
-                  "example": "any"
+                  "example": ["book3", "book4"]
                 }
               }
             }
@@ -497,7 +509,8 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": ["Orders"],
+        "description": "Delete a specific order by ID",
         "parameters": [
           {
             "name": "orderId",
@@ -577,7 +590,8 @@
     },
     "/user/{userId}": {
       "get": {
-        "description": "",
+        "tags": ["Users"],
+        "description": "Retrieve a specific user by ID",
         "parameters": [
           {
             "name": "userId",
@@ -602,7 +616,8 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Users"],
+        "description": "Update a specific user by ID",
         "parameters": [
           {
             "name": "userId",
@@ -617,19 +632,19 @@
               "type": "object",
               "properties": {
                 "type": {
-                  "example": "any"
+                  "example": "admin"
                 },
                 "email": {
-                  "example": "any"
+                  "example": "admin@example.com"
                 },
                 "phone": {
-                  "example": "any"
+                  "example": "098-765-4321"
                 },
                 "address": {
-                  "example": "any"
+                  "example": "456 Elm St"
                 },
                 "password": {
-                  "example": "any"
+                  "example": "newpassword123"
                 }
               }
             }
@@ -651,7 +666,8 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": ["Users"],
+        "description": "Delete a specific user by ID",
         "parameters": [
           {
             "name": "userId",
