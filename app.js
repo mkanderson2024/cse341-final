@@ -21,6 +21,7 @@ app.use((req, res, next) => {
 });
 
 // Session configuration
+console.log('MongoStore:', MongoStore);
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
