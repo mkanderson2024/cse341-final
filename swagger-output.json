@@ -5,9 +5,9 @@
     "description": "API Documentation for Da Book Store - CSE 341 Final Project for Team 5",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "cse341-final-56l4.onrender.com",
   "basePath": "/",
-  "schemes": ["http"],
+  "schemes": ["https"],
   "paths": {
     "/": {
       "get": {
