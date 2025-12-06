@@ -62,6 +62,23 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Internal server error', error: err.message });
 });
 
+// Code to start server when not running tests
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3000
+
+  // Initialize MongoDB
+  mongodb.initDb((err) => {
+    if (err) {
+      console.error('Failed to connect to database:', err);
+      process.exit(1);
+    }
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  });
+};
+
+
 ////////////////START SERVER & DB ////////////////// This part must transformed in comments
 // Initialize DB and start server
 /*mongodb.initDb((err) => {
@@ -75,5 +92,5 @@ app.use((err, req, res, next) => {
 });*/
 /////////////////////////////////////////////////////
 //Line of code must be inserted
-//the app ill be imported by Jest and Supertest 
+//the app ill be imported by Jest and Supertest \
 module.exports = app;

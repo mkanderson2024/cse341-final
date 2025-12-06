@@ -9,7 +9,6 @@
     "dev": "nodemon app.js",
     "swagger": "node ./swagger.js"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mkanderson2024/cse341-final.git"
