@@ -40,6 +40,7 @@ const getAudioById = async (req, res) => {
 
 // POST create new audiobook
 const createAudio = async (req, res) => {
+  // #swagger.security = [{ "oauth2": [] }]
   try {
     const audio = {
         title: req.body.title,
@@ -70,6 +71,7 @@ const createAudio = async (req, res) => {
 
 // PUT update audiobook by ID
 const updateAudio = async (req, res) => {
+  // #swagger.security = [{ "oauth2": [] }]
   try {
     const audioId = req.params.audioId;
     
@@ -106,6 +108,7 @@ const updateAudio = async (req, res) => {
 
 // DELETE audiobook by ID
 const deleteAudio = async (req, res) => {
+  // #swagger.security = [{ "oauth2": [] }]
   try {
     const audioId = req.params.audioId;
     
