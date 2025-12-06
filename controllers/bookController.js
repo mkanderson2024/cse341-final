@@ -7,7 +7,38 @@ const collectionName = 'books';
 const getAllBooks = async (req, res) => {
   try {
     const db = mongodb.getDb();
-    const books = await db.collection(collectionName).find().toArray();
+    const books = await db.collection(collectionName).aggregate([
+      // 1. Look up audiobooks by bookId
+      {
+        $lookup: {
+          from: "audioBook",
+          localField: "_id",
+          foreignField: "bookId",
+          as: "audiobooks"
+        }
+      },
+
+      // 2. Only keep certain audiobook fields
+      {
+        $project: {
+          title: 1,
+          author: 1,
+          pages: 1,
+          genre: 1,
+          printType: 1,
+          publisher: 1,
+          hasAudiobook: 1,
+
+          "audiobooks._id": 1,
+          "audiobooks.type": 1,
+          "audiobooks.voiceActor": 1,
+          "audiobooks.time": 1,
+          "audiobooks.recordingStudio": 1,
+          "audiobooks.audioFormat": 1
+        }
+      }
+    ]).toArray();
+    
     res.status(200).json(books);
   } catch (error) {
     console.error('Error fetching books:', error);
@@ -25,8 +56,40 @@ const getBookById = async (req, res) => {
     }
 
     const db = mongodb.getDb();
-    const book = await db.collection(collectionName).findOne({ _id: new ObjectId(bookId) });
-    
+    const book = await db.collection(collectionName).aggregate([
+      { 
+        $match: { _id: new ObjectId(bookId) }
+      },
+
+      {
+        $lookup: {
+          from: "audioBook",
+          localField: "_id",
+          foreignField: "bookId",
+          as: "audiobooks"
+        }
+      },
+
+      {
+        $project: {
+          title: 1,
+          author: 1,
+          pages: 1,
+          genre: 1,
+          printType: 1,
+          publisher: 1,
+          hasAudiobook: 1,
+
+          "audiobooks._id": 1,
+          "audiobooks.type": 1,
+          "audiobooks.voiceActor": 1,
+          "audiobooks.time": 1,
+          "audiobooks.recordingStudio": 1,
+          "audiobooks.audioFormat": 1
+        }
+      }
+    ]).toArray();
+
     if (!book) {
       return res.status(404).json({ message: 'Book not found' });
     }
@@ -48,7 +111,8 @@ const createBook = async (req, res) => {
       pages: req.body.pages,
       genre: req.body.genre,
       printType: req.body.printType, // Paper, Hardback, or Digital
-      publisher: req.body.publisher
+      publisher: req.body.publisher,
+      hasAudiobook: false
     };
 
     const db = mongodb.getDb();
@@ -84,11 +148,12 @@ const updateBook = async (req, res) => {
       pages: req.body.pages,
       genre: req.body.genre,
       printType: req.body.printType, // Paper, Hardback, or Digital
-      publisher: req.body.publisher
+      publisher: req.body.publisher,
+      hasAudiobook: req.body.hasAudiobook
     };
 
     const db = mongodb.getDb();
-    const result = await db.collection(collectionName).replaceOne(
+    const result = await db.collection(collectionName).updateOne(
       { _id: new ObjectId(bookId) },
       updatedBook
     );
