@@ -6,7 +6,7 @@ const {
     orderIdValidation,
     userIdParamValidation,
     validate
-    } = require('../validators/orderValidation')
+    } = require('../validators/orderValidator')
 
 const orderController = require('../controllers/orderController');
 
