@@ -155,7 +155,7 @@ const updateBook = async (req, res) => {
     const db = mongodb.getDb();
     const result = await db.collection(collectionName).updateOne(
       { _id: new ObjectId(bookId) },
-      updatedBook
+      { $set: updatedBook }
     );
     
     if (result.matchedCount === 0) {
