@@ -8,33 +8,40 @@
   "host": "cse341-final-56l4.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
+
+  "securityDefinitions": {
+    "JWT": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter JWT token like: Bearer <token>"
+    }
+  },
+
   "paths": {
     "/": {
       "get": {
         "description": "Welcome endpoint for the API",
         "responses": {
-          "200": {
-            "description": "OK"
-          }
+          "200": { "description": "OK" }
         }
       }
     },
+
     "/books/": {
       "get": {
         "tags": ["Books"],
         "description": "Retrieve all books",
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
         }
       },
+
       "post": {
         "tags": ["Books"],
         "description": "Create a new book",
+        "security": [{ "JWT": [] }],
         "parameters": [
           {
             "name": "body",
@@ -42,173 +49,102 @@
             "schema": {
               "type": "object",
               "properties": {
-                "title": {
-                  "example": "Harry Potter and the Philosopher's Stone"
-                },
-                "author": {
-                  "example": "J.K. Rowling"
-                },
-                "pages": {
-                  "example": 223
-                },
-                "genre": {
-                  "example": "Fantasy"
-                },
-                "printType": {
-                  "example": "Paperback"
-                },
-                "publisher": {
-                  "example": "Bloomsbury"
-                }
+                "title": { "example": "Harry Potter and the Philosopher's Stone" },
+                "author": { "example": "J.K. Rowling" },
+                "pages": { "example": 223 },
+                "genre": { "example": "Fantasy" },
+                "printType": { "example": "Paperback" },
+                "publisher": { "example": "Bloomsbury" }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
+
     "/books/{bookId}": {
       "get": {
         "tags": ["Books"],
         "description": "Retrieve a specific book by ID",
         "parameters": [
-          {
-            "name": "bookId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "bookId", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
+
       "put": {
         "tags": ["Books"],
         "description": "Update a specific book by ID",
+        "security": [{ "JWT": [] }],
         "parameters": [
-          {
-            "name": "bookId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
+          { "name": "bookId", "in": "path", "required": true, "type": "string" },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "title": {
-                  "example": "Harry Potter and the Chamber of Secrets"
-                },
-                "author": {
-                  "example": "J.K. Rowling"
-                },
-                "pages": {
-                  "example": 341
-                },
-                "genre": {
-                  "example": "Fantasy"
-                },
-                "printType": {
-                  "example": "Hardcover"
-                },
-                "publisher": {
-                  "example": "Bloomsbury"
-                }
+                "title": { "example": "Harry Potter and the Chamber of Secrets" },
+                "author": { "example": "J.K. Rowling" },
+                "pages": { "example": 341 },
+                "genre": { "example": "Fantasy" },
+                "printType": { "example": "Hardcover" },
+                "publisher": { "example": "Bloomsbury" }
               }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
+
       "delete": {
         "tags": ["Books"],
         "description": "Delete a specific book by ID",
+        "security": [{ "JWT": [] }],
         "parameters": [
-          {
-            "name": "bookId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "bookId", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
+
     "/audio-books/": {
       "get": {
         "tags": ["Audio Books"],
         "description": "Retrieve all audio books",
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
         }
       },
+
       "post": {
         "tags": ["Audio Books"],
         "description": "Create a new audio book",
+        "security": [{ "JWT": [] }],
         "parameters": [
           {
             "name": "body",
@@ -216,174 +152,97 @@
             "schema": {
               "type": "object",
               "properties": {
-                "title": {
-                  "example": "The Hobbit"
-                },
-                "author": {
-                  "example": "J.R.R. Tolkien"
-                },
-                "voiceActor": {
-                  "example": "Rob Inglis"
-                },
-                "recordingStudio": {
-                  "example": "BBC"
-                },
-                "genre": {
-                  "example": "Fantasy"
-                },
-                "audioFormat": {
-                  "example": "MP3"
-                },
-                "time": {
-                  "example": "11:30:00"
-                }
+                "title": { "example": "The Hobbit" },
+                "author": { "example": "J.R.R. Tolkien" },
+                "voiceActor": { "example": "Rob Inglis" },
+                "recordingStudio": { "example": "BBC" },
+                "genre": { "example": "Fantasy" },
+                "audioFormat": { "example": "MP3" },
+                "time": { "example": "11:30:00" }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
+
     "/audio-books/{audioId}": {
       "get": {
         "tags": ["Audio Books"],
         "description": "Retrieve a specific audio book by ID",
         "parameters": [
-          {
-            "name": "audioId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "audioId", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
+
       "put": {
         "tags": ["Audio Books"],
         "description": "Update a specific audio book by ID",
+        "security": [{ "JWT": [] }],
         "parameters": [
-          {
-            "name": "audioId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
+          { "name": "audioId", "in": "path", "required": true, "type": "string" },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "title": {
-                  "example": "The Lord of the Rings"
-                },
-                "author": {
-                  "example": "J.R.R. Tolkien"
-                },
-                "voiceActor": {
-                  "example": "Rob Inglis"
-                },
-                "recordingStudio": {
-                  "example": "BBC"
-                },
-                "genre": {
-                  "example": "Fantasy"
-                },
-                "audioFormat": {
-                  "example": "MP3"
-                },
-                "time": {
-                  "example": "12:00:00"
-                }
+                "title": { "example": "The Lord of the Rings" },
+                "author": { "example": "J.R.R. Tolkien" },
+                "voiceActor": { "example": "Rob Inglis" },
+                "recordingStudio": { "example": "BBC" },
+                "genre": { "example": "Fantasy" },
+                "audioFormat": { "example": "MP3" },
+                "time": { "example": "12:00:00" }
               }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
+
       "delete": {
         "tags": ["Audio Books"],
         "description": "Delete a specific audio book by ID",
+        "security": [{ "JWT": [] }],
         "parameters": [
-          {
-            "name": "audioId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "audioId", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
+
     "/orders/": {
       "get": {
         "tags": ["Orders"],
         "description": "Retrieve all orders",
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "post": {
@@ -396,155 +255,86 @@
             "schema": {
               "type": "object",
               "properties": {
-                "userId": {
-                  "example": "user123"
-                },
-                "shippingAddress": {
-                  "example": "123 Main St, City, State"
-                },
-                "date": {
-                  "example": "2023-10-01"
-                },
-                "paymentMethod": {
-                  "example": "Credit Card"
-                },
-                "trackingNumber": {
-                  "example": "TRACK123"
-                },
-                "bookIds": {
-                  "example": ["book1", "book2"]
-                }
+                "userId": { "example": "user123" },
+                "shippingAddress": { "example": "123 Main St, City, State" },
+                "date": { "example": "2023-10-01" },
+                "paymentMethod": { "example": "Credit Card" },
+                "trackingNumber": { "example": "TRACK123" },
+                "bookIds": { "example": ["book1", "book2"] }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "201": { "description": "Created" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
+
     "/orders/{orderId}": {
       "get": {
         "tags": ["Orders"],
         "description": "Retrieve a specific order by ID",
         "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "orderId", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "put": {
         "tags": ["Orders"],
         "description": "Update a specific order by ID",
         "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
+          { "name": "orderId", "in": "path", "required": true, "type": "string" },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "userId": {
-                  "example": "user456"
-                },
-                "shippingAddress": {
-                  "example": "456 Elm St, City, State"
-                },
-                "date": {
-                  "example": "2023-10-02"
-                },
-                "paymentMethod": {
-                  "example": "PayPal"
-                },
-                "trackingNumber": {
-                  "example": "TRACK456"
-                },
-                "bookIds": {
-                  "example": ["book3", "book4"]
-                }
+                "userId": { "example": "user456" },
+                "shippingAddress": { "example": "456 Elm St, City, State" },
+                "date": { "example": "2023-10-02" },
+                "paymentMethod": { "example": "PayPal" },
+                "trackingNumber": { "example": "TRACK456" },
+                "bookIds": { "example": ["book3", "book4"] }
               }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "delete": {
         "tags": ["Orders"],
         "description": "Delete a specific order by ID",
         "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "orderId", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
+
     "/user/": {
       "get": {
         "description": "",
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "post": {
@@ -556,139 +346,77 @@
             "schema": {
               "type": "object",
               "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "type": {
-                  "example": "any"
-                },
-                "phone": {
-                  "example": "any"
-                },
-                "address": {
-                  "example": "any"
-                }
+                "email": { "example": "any" },
+                "password": { "example": "any" },
+                "type": { "example": "any" },
+                "phone": { "example": "any" },
+                "address": { "example": "any" }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
+
     "/user/{userId}": {
       "get": {
         "tags": ["Users"],
         "description": "Retrieve a specific user by ID",
         "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "userId", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
+
       "put": {
         "tags": ["Users"],
         "description": "Update a specific user by ID",
         "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
+          { "name": "userId", "in": "path", "required": true, "type": "string" },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "type": {
-                  "example": "admin"
-                },
-                "email": {
-                  "example": "admin@example.com"
-                },
-                "phone": {
-                  "example": "098-765-4321"
-                },
-                "address": {
-                  "example": "456 Elm St"
-                },
-                "password": {
-                  "example": "newpassword123"
-                }
+                "type": { "example": "admin" },
+                "email": { "example": "admin@example.com" },
+                "phone": { "example": "098-765-4321" },
+                "address": { "example": "456 Elm St" },
+                "password": { "example": "newpassword123" }
               }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
+
       "delete": {
         "tags": ["Users"],
         "description": "Delete a specific user by ID",
         "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+          { "name": "userId", "in": "path", "required": true, "type": "string" }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     }
