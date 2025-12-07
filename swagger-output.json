@@ -10,13 +10,16 @@
   "schemes": ["https"],
 
   "securityDefinitions": {
-    "JWT": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header",
-      "description": "Enter JWT token like: Bearer <token>"
+  "GitHubOAuth": {
+    "type": "oauth2",
+    "flow": "implicit", 
+    "authorizationUrl": "https://cse341-final-56l4.onrender.com/auth/github",
+    "scopes": {
+      "write": "Write access to API",
+      "delete": "Delete access to API"
     }
-  },
+  }
+},
 
   "paths": {
     "/": {
@@ -41,7 +44,9 @@
       "post": {
         "tags": ["Books"],
         "description": "Create a new book",
-        "security": [{ "JWT": [] }],
+        "security": [
+            { "GitHubOAuth": ["write"] }
+          ],
         "parameters": [
           {
             "name": "body",
@@ -86,7 +91,9 @@
       "put": {
         "tags": ["Books"],
         "description": "Update a specific book by ID",
-        "security": [{ "JWT": [] }],
+        "security": [
+            { "GitHubOAuth": ["write"] }
+          ],
         "parameters": [
           { "name": "bookId", "in": "path", "required": true, "type": "string" },
           {
@@ -117,7 +124,9 @@
       "delete": {
         "tags": ["Books"],
         "description": "Delete a specific book by ID",
-        "security": [{ "JWT": [] }],
+        "security": [
+            { "GitHubOAuth": ["write"] }
+          ],
         "parameters": [
           { "name": "bookId", "in": "path", "required": true, "type": "string" }
         ],
@@ -144,7 +153,9 @@
       "post": {
         "tags": ["Audio Books"],
         "description": "Create a new audio book",
-        "security": [{ "JWT": [] }],
+        "security": [
+            { "GitHubOAuth": ["write"] }
+          ],
         "parameters": [
           {
             "name": "body",
@@ -190,7 +201,9 @@
       "put": {
         "tags": ["Audio Books"],
         "description": "Update a specific audio book by ID",
-        "security": [{ "JWT": [] }],
+        "security": [
+            { "GitHubOAuth": ["write"] }
+          ],
         "parameters": [
           { "name": "audioId", "in": "path", "required": true, "type": "string" },
           {
@@ -222,7 +235,9 @@
       "delete": {
         "tags": ["Audio Books"],
         "description": "Delete a specific audio book by ID",
-        "security": [{ "JWT": [] }],
+        "security": [
+            { "GitHubOAuth": ["write"] }
+          ],
         "parameters": [
           { "name": "audioId", "in": "path", "required": true, "type": "string" }
         ],
