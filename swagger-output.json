@@ -331,6 +331,7 @@
 
     "/user/": {
       "get": {
+        "tags": ["Users"],
         "description": "",
         "responses": {
           "200": { "description": "OK" },
@@ -338,6 +339,7 @@
         }
       },
       "post": {
+        "tags": ["Users"],
         "description": "",
         "parameters": [
           {
