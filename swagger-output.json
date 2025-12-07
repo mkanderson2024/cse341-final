@@ -7,21 +7,23 @@
   },
   "host": "cse341-final-56l4.onrender.com",
   "basePath": "/",
-  "schemes": ["https"],
+  "schemes": [
+    "https"
+  ],
 
   "securityDefinitions": {
     "JWT": {
       "type": "apiKey",
       "name": "Authorization",
       "in": "header",
-      "description": "Enter JWT token like: Bearer <token>"
+      "description": "Enter your JWT token like: Bearer <token>"
     }
   },
 
   "paths": {
     "/": {
       "get": {
-        "description": "Welcome endpoint for the API",
+        "description": "",
         "responses": {
           "200": { "description": "OK" }
         }
@@ -30,18 +32,14 @@
 
     "/books/": {
       "get": {
-        "tags": ["Books"],
-        "description": "Retrieve all books",
+        "description": "",
         "responses": {
           "200": { "description": "OK" },
           "500": { "description": "Internal Server Error" }
         }
       },
-
       "post": {
-        "tags": ["Books"],
-        "description": "Create a new book",
-        "security": [{ "JWT": [] }],
+        "description": "",
         "parameters": [
           {
             "name": "body",
@@ -49,12 +47,12 @@
             "schema": {
               "type": "object",
               "properties": {
-                "title": { "example": "Harry Potter and the Philosopher's Stone" },
-                "author": { "example": "J.K. Rowling" },
-                "pages": { "example": 223 },
-                "genre": { "example": "Fantasy" },
-                "printType": { "example": "Paperback" },
-                "publisher": { "example": "Bloomsbury" }
+                "title": { "example": "any" },
+                "author": { "example": "any" },
+                "pages": { "example": "any" },
+                "genre": { "example": "any" },
+                "printType": { "example": "any" },
+                "publisher": { "example": "any" }
               }
             }
           }
@@ -64,14 +62,16 @@
           "400": { "description": "Bad Request" },
           "401": { "description": "Unauthorized" },
           "500": { "description": "Internal Server Error" }
-        }
+        },
+        "security": [
+          { "JWT": [] }
+        ]
       }
     },
 
     "/books/{bookId}": {
       "get": {
-        "tags": ["Books"],
-        "description": "Retrieve a specific book by ID",
+        "description": "",
         "parameters": [
           { "name": "bookId", "in": "path", "required": true, "type": "string" }
         ],
@@ -82,11 +82,8 @@
           "500": { "description": "Internal Server Error" }
         }
       },
-
       "put": {
-        "tags": ["Books"],
-        "description": "Update a specific book by ID",
-        "security": [{ "JWT": [] }],
+        "description": "",
         "parameters": [
           { "name": "bookId", "in": "path", "required": true, "type": "string" },
           {
@@ -95,12 +92,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "title": { "example": "Harry Potter and the Chamber of Secrets" },
-                "author": { "example": "J.K. Rowling" },
-                "pages": { "example": 341 },
-                "genre": { "example": "Fantasy" },
-                "printType": { "example": "Hardcover" },
-                "publisher": { "example": "Bloomsbury" }
+                "title": { "example": "any" },
+                "author": { "example": "any" },
+                "pages": { "example": "any" },
+                "genre": { "example": "any" },
+                "printType": { "example": "any" },
+                "publisher": { "example": "any" },
+                "hasAudiobook": { "example": "any" }
               }
             }
           }
@@ -111,13 +109,13 @@
           "401": { "description": "Unauthorized" },
           "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" }
-        }
+        },
+        "security": [
+          { "JWT": [] }
+        ]
       },
-
       "delete": {
-        "tags": ["Books"],
-        "description": "Delete a specific book by ID",
-        "security": [{ "JWT": [] }],
+        "description": "",
         "parameters": [
           { "name": "bookId", "in": "path", "required": true, "type": "string" }
         ],
@@ -127,24 +125,23 @@
           "401": { "description": "Unauthorized" },
           "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" }
-        }
+        },
+        "security": [
+          { "JWT": [] }
+        ]
       }
     },
 
     "/audio-books/": {
       "get": {
-        "tags": ["Audio Books"],
-        "description": "Retrieve all audio books",
+        "description": "",
         "responses": {
           "200": { "description": "OK" },
           "500": { "description": "Internal Server Error" }
         }
       },
-
       "post": {
-        "tags": ["Audio Books"],
-        "description": "Create a new audio book",
-        "security": [{ "JWT": [] }],
+        "description": "",
         "parameters": [
           {
             "name": "body",
@@ -152,13 +149,15 @@
             "schema": {
               "type": "object",
               "properties": {
-                "title": { "example": "The Hobbit" },
-                "author": { "example": "J.R.R. Tolkien" },
-                "voiceActor": { "example": "Rob Inglis" },
-                "recordingStudio": { "example": "BBC" },
-                "genre": { "example": "Fantasy" },
-                "audioFormat": { "example": "MP3" },
-                "time": { "example": "11:30:00" }
+                "bookId": { "example": "any" },
+                "title": { "example": "any" },
+                "type": { "example": "any" },
+                "author": { "example": "any" },
+                "voiceActor": { "example": "any" },
+                "recordingStudio": { "example": "any" },
+                "genre": { "example": "any" },
+                "audioFormat": { "example": "any" },
+                "time": { "example": "any" }
               }
             }
           }
@@ -167,15 +166,18 @@
           "201": { "description": "Created" },
           "400": { "description": "Bad Request" },
           "401": { "description": "Unauthorized" },
+          "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" }
-        }
+        },
+        "security": [
+          { "JWT": [] }
+        ]
       }
     },
 
     "/audio-books/{audioId}": {
       "get": {
-        "tags": ["Audio Books"],
-        "description": "Retrieve a specific audio book by ID",
+        "description": "",
         "parameters": [
           { "name": "audioId", "in": "path", "required": true, "type": "string" }
         ],
@@ -186,11 +188,8 @@
           "500": { "description": "Internal Server Error" }
         }
       },
-
       "put": {
-        "tags": ["Audio Books"],
-        "description": "Update a specific audio book by ID",
-        "security": [{ "JWT": [] }],
+        "description": "",
         "parameters": [
           { "name": "audioId", "in": "path", "required": true, "type": "string" },
           {
@@ -199,13 +198,15 @@
             "schema": {
               "type": "object",
               "properties": {
-                "title": { "example": "The Lord of the Rings" },
-                "author": { "example": "J.R.R. Tolkien" },
-                "voiceActor": { "example": "Rob Inglis" },
-                "recordingStudio": { "example": "BBC" },
-                "genre": { "example": "Fantasy" },
-                "audioFormat": { "example": "MP3" },
-                "time": { "example": "12:00:00" }
+                "bookId": { "example": "any" },
+                "title": { "example": "any" },
+                "author": { "example": "any" },
+                "voiceActor": { "example": "any" },
+                "recordingStudio": { "example": "any" },
+                "genre": { "example": "any" },
+                "audioFormat": { "example": "any" },
+                "time": { "example": "any" },
+                "type": { "example": "any" }
               }
             }
           }
@@ -216,13 +217,13 @@
           "401": { "description": "Unauthorized" },
           "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" }
-        }
+        },
+        "security": [
+          { "JWT": [] }
+        ]
       },
-
       "delete": {
-        "tags": ["Audio Books"],
-        "description": "Delete a specific audio book by ID",
-        "security": [{ "JWT": [] }],
+        "description": "",
         "parameters": [
           { "name": "audioId", "in": "path", "required": true, "type": "string" }
         ],
@@ -232,22 +233,23 @@
           "401": { "description": "Unauthorized" },
           "404": { "description": "Not Found" },
           "500": { "description": "Internal Server Error" }
-        }
+        },
+        "security": [
+          { "JWT": [] }
+        ]
       }
     },
 
     "/orders/": {
       "get": {
-        "tags": ["Orders"],
-        "description": "Retrieve all orders",
+        "description": "",
         "responses": {
           "200": { "description": "OK" },
           "500": { "description": "Internal Server Error" }
         }
       },
       "post": {
-        "tags": ["Orders"],
-        "description": "Create a new order",
+        "description": "",
         "parameters": [
           {
             "name": "body",
@@ -255,12 +257,12 @@
             "schema": {
               "type": "object",
               "properties": {
-                "userId": { "example": "user123" },
-                "shippingAddress": { "example": "123 Main St, City, State" },
-                "date": { "example": "2023-10-01" },
-                "paymentMethod": { "example": "Credit Card" },
-                "trackingNumber": { "example": "TRACK123" },
-                "bookIds": { "example": ["book1", "book2"] }
+                "userId": { "example": "any" },
+                "shippingAddress": { "example": "any" },
+                "date": { "example": "any" },
+                "paymentMethod": { "example": "any" },
+                "trackingNumber": { "example": "any" },
+                "bookIds": { "example": "any" }
               }
             }
           }
@@ -274,8 +276,7 @@
 
     "/orders/{orderId}": {
       "get": {
-        "tags": ["Orders"],
-        "description": "Retrieve a specific order by ID",
+        "description": "",
         "parameters": [
           { "name": "orderId", "in": "path", "required": true, "type": "string" }
         ],
@@ -287,8 +288,7 @@
         }
       },
       "put": {
-        "tags": ["Orders"],
-        "description": "Update a specific order by ID",
+        "description": "",
         "parameters": [
           { "name": "orderId", "in": "path", "required": true, "type": "string" },
           {
@@ -297,12 +297,12 @@
             "schema": {
               "type": "object",
               "properties": {
-                "userId": { "example": "user456" },
-                "shippingAddress": { "example": "456 Elm St, City, State" },
-                "date": { "example": "2023-10-02" },
-                "paymentMethod": { "example": "PayPal" },
-                "trackingNumber": { "example": "TRACK456" },
-                "bookIds": { "example": ["book3", "book4"] }
+                "userId": { "example": "any" },
+                "shippingAddress": { "example": "any" },
+                "date": { "example": "any" },
+                "paymentMethod": { "example": "any" },
+                "trackingNumber": { "example": "any" },
+                "bookIds": { "example": "any" }
               }
             }
           }
@@ -315,8 +315,7 @@
         }
       },
       "delete": {
-        "tags": ["Orders"],
-        "description": "Delete a specific order by ID",
+        "description": "",
         "parameters": [
           { "name": "orderId", "in": "path", "required": true, "type": "string" }
         ],
@@ -365,8 +364,7 @@
 
     "/user/{userId}": {
       "get": {
-        "tags": ["Users"],
-        "description": "Retrieve a specific user by ID",
+        "description": "",
         "parameters": [
           { "name": "userId", "in": "path", "required": true, "type": "string" }
         ],
@@ -377,10 +375,8 @@
           "500": { "description": "Internal Server Error" }
         }
       },
-
       "put": {
-        "tags": ["Users"],
-        "description": "Update a specific user by ID",
+        "description": "",
         "parameters": [
           { "name": "userId", "in": "path", "required": true, "type": "string" },
           {
@@ -389,11 +385,11 @@
             "schema": {
               "type": "object",
               "properties": {
-                "type": { "example": "admin" },
-                "email": { "example": "admin@example.com" },
-                "phone": { "example": "098-765-4321" },
-                "address": { "example": "456 Elm St" },
-                "password": { "example": "newpassword123" }
+                "type": { "example": "any" },
+                "email": { "example": "any" },
+                "phone": { "example": "any" },
+                "address": { "example": "any" },
+                "password": { "example": "any" }
               }
             }
           }
@@ -405,10 +401,8 @@
           "500": { "description": "Internal Server Error" }
         }
       },
-
       "delete": {
-        "tags": ["Users"],
-        "description": "Delete a specific user by ID",
+        "description": "",
         "parameters": [
           { "name": "userId", "in": "path", "required": true, "type": "string" }
         ],
