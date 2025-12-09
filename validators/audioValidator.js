@@ -38,6 +38,10 @@ const audioBookValidationRules = () => {
       .withMessage("Time field cannot be empty")
       .matches(/^([01]\d|2[0-3]):([0-5]\d)$/)
       .withMessage("Time must be in hh:mm format"),
+    body("bookId")
+      .optional({ nullable: true })
+      .isMongoId()
+      .withMessage("Invalid Book ID format")
   ];
 };
 
