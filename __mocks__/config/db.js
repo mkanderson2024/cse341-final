@@ -1,105 +1,177 @@
 // Arquivo: __mock__/config/db.js
 
-// 1. Simulação do ObjectId do MongoDB
-// É crucial para que o código do controller que usa ObjectId.isValid e new ObjectId funcione.
 const { ObjectId } = require('mongodb');
 
-// 2. Dados Fictícios (Simulando a Coleção 'users')
-// Adicione IDs válidos para simular o comportamento do MongoDB
-const mockUsers = [
-    {
-        _id: new ObjectId("656b8566a01b63777083049b"), // Exemplo de ID válido
-        type: "seller",
-        email: "alice@example.com",
-        phone: "11987654321",
-        address: "Rua A, 123",
-        password: "hashed_password_1",
-        createdAt: new Date("2025-11-30T10:00:00.000Z"),
-        updatedAt: new Date("2025-11-30T10:00:00.000Z")
-    },
-    {
-        _id: new ObjectId("656b8566a01b63777083049c"),
-        type: "buyer",
-        email: "bob@example.com",
-        phone: "21998877665",
-        address: "Av B, 456",
-        password: "hashed_password_2",
-        createdAt: new Date("2025-11-30T11:00:00.000Z"),
-        updatedAt: new Date("2025-11-30T11:00:00.000Z")
-    }
-];
+//
+// ======================================================
+// 0. DEFINIÇÕES DE CURSOR GLOBAIS (CRUCIAL PARA ENCADEMENTO)
+// ======================================================
+//
 
-// 3. Simulação da Função find().toArray()
-// Esta função simula o método .find().toArray() usado no getAllUsers.
-const mockFind = {
-    toArray: jest.fn().mockResolvedValue(mockUsers) // Retorna a lista completa de usuários mock
+// Instância de cursor genérico mockada para AGGREGATE e FIND
+const mockCursorReturn = {
+    // toArray é a função que o teste irá configurar o valor de retorno (mockResolvedValue)
+    toArray: jest.fn(), 
+    // Garante que métodos de cursor e pipeline retornam a si mesmos para encadeamento
+    sort: jest.fn(function() { return this; }), 
+    limit: jest.fn(function() { return this; }),
+    project: jest.fn(function() { return this; }),
+    match: jest.fn(function() { return this; }),
+    lookup: jest.fn(function() { return this; }), 
+    next: jest.fn(), 
 };
 
-// 4. Simulação da Coleção (o objeto retornado por db.collection('users'))
-// Contém todas as operações de banco de dados que seu controller usa.
-const mockCollection = {
-    // Implementa a simulação para o getAllUsers (find().toArray())
-    find: jest.fn(() => mockFind), 
+//
+// ======================================================
+// 1. USERS COLLECTION
+// ======================================================
+//
 
-    // Implementa a simulação para o getUserById (findOne)
+const mockUsers = [
+    // ... (Seus dados mockUsers originais)
+];
+
+const mockUsersCollection = {
+    find: jest.fn(() => mockCursorReturn),
+
     findOne: jest.fn(async (query) => {
-        // Encontra o usuário na lista mock pelo _id.
         const idToFind = query._id.toHexString();
         return mockUsers.find(u => u._id.toHexString() === idToFind) || null;
     }),
 
-    // Implementa a simulação para o createUser (insertOne)
     insertOne: jest.fn(async (doc) => {
-        const newId = new ObjectId(); // Gera um novo ID mock
+        const newId = new ObjectId();
         const newUser = { ...doc, _id: newId };
-        mockUsers.push(newUser); // Adiciona o novo usuário ao mock
+        mockUsers.push(newUser);
         return { acknowledged: true, insertedId: newId };
     }),
 
-    // Implementa a simulação para o updateUser (replaceOne)
     replaceOne: jest.fn(async (query, replacement) => {
         const idToReplace = query._id.toHexString();
         const index = mockUsers.findIndex(u => u._id.toHexString() === idToReplace);
         
-        if (index === -1) {
-            return { matchedCount: 0 };
-        }
+        if (index === -1) return { matchedCount: 0 };
 
         const updatedUser = { ...replacement, _id: query._id };
         mockUsers[index] = updatedUser;
         return { matchedCount: 1 };
     }),
 
-    // Implementa a simulação para o deleteUser (deleteOne)
     deleteOne: jest.fn(async (query) => {
-        const idToDelete = query._id.toHexString();
-        const initialLength = mockUsers.length;
-        
-        // Remove o usuário da lista mock
-        const newMockUsers = mockUsers.filter(u => u._id.toHexString() !== idToDelete);
-        mockUsers.splice(0, mockUsers.length, ...newMockUsers); // Atualiza o array mock
+        const id = query._id.toHexString();
+        const initial = mockUsers.length;
 
-        return { deletedCount: initialLength - mockUsers.length };
+        const newList = mockUsers.filter(u => u._id.toHexString() !== id);
+        mockUsers.splice(0, mockUsers.length, ...newList);
+
+        return { deletedCount: initial - mockUsers.length };
     }),
+    
+    aggregate: jest.fn(() => mockCursorReturn),
 };
 
-// 5. Simulação da Instância do Banco de Dados (o objeto retornado por mongodb.getDb())
-// Contém o método .collection(collectionName).
-const mockDb = {
-    // Verifica se a coleção é 'users' e retorna o mock da coleção.
-    collection: jest.fn((name) => {
-        if (name === 'users') {
-            return mockCollection;
-        }
-        throw new Error(`Collection mock not found for: ${name}`);
+
+//
+// ======================================================
+// 2. ORDERS COLLECTION
+// ======================================================
+//
+
+const mockOrders = [];
+
+const mockOrdersCollection = {
+    
+    find: jest.fn(() => mockCursorReturn),
+    aggregate: jest.fn(() => mockCursorReturn),
+
+    findOne: jest.fn(async (query) => {
+        return mockOrders.find(o => o._id.toHexString() === query._id.toHexString()) || null;
+    }),
+
+    insertOne: jest.fn(async (doc) => {
+        const newId = new ObjectId();
+        const newOrder = { ...doc, _id: newId };
+        mockOrders.push(newOrder);
+        return { acknowledged: true, insertedId: newId };
+    }),
+
+    updateOne: jest.fn(async (query, update) => {
+        const id = query._id.toHexString();
+        const index = mockOrders.findIndex(o => o._id.toHexString() === id);
+
+        if (index === -1) return { matchedCount: 0 };
+
+        mockOrders[index] = { ...mockOrders[index], ...update.$set };
+        return { matchedCount: 1 };
+    }),
+
+    deleteOne: jest.fn(async (query) => {
+        const id = query._id.toHexString();
+        const initial = mockOrders.length;
+
+        const newList = mockOrders.filter(o => o._id.toHexString() !== id);
+        mockOrders.splice(0, mockOrders.length, ...newList);
+
+        return { deletedCount: initial - mockOrders.length };
     })
 };
 
-// 6. Objeto Mock Final (o módulo que será exportado)
-// Contém o método getDb().
-const mockMongodb = {
-    // Retorna a instância do DB mock.
-    getDb: jest.fn(() => mockDb)
+
+//
+// ======================================================
+// 3. BOOKS COLLECTION (REMOVIDAS REFERÊNCIAS AO AUDIOBOOK)
+// ======================================================
+//
+
+const mockBooksCollection = {
+    // Books usa aggregate extensivamente
+    aggregate: jest.fn(() => mockCursorReturn), 
+    find: jest.fn(() => mockCursorReturn),
+    
+    // Mocks CRUD simples
+    findOne: jest.fn(),
+    insertOne: jest.fn(),
+    updateOne: jest.fn(),
+    deleteOne: jest.fn(),
+    
+    countDocuments: jest.fn(), 
 };
 
-module.exports = mockMongodb;
+
+//
+// ======================================================
+// 4. MOCK DB (Central Dispatch)
+// ======================================================
+//
+
+// Cria uma coleção genérica de fallback para as coleções não definidas
+const genericCollectionMock = {
+    find: jest.fn(() => mockCursorReturn),
+    aggregate: jest.fn(() => mockCursorReturn),
+    findOne: jest.fn(),
+    insertOne: jest.fn(),
+    updateOne: jest.fn(),
+    deleteOne: jest.fn(),
+    countDocuments: jest.fn(),
+};
+
+const mockDb = {
+    collection: jest.fn((name) => {
+        if (name === "users") return mockUsersCollection;
+        if (name === "orders") return mockOrdersCollection;
+        if (name === "books") return mockBooksCollection; 
+        
+        return genericCollectionMock;
+    })
+};
+
+//
+// ======================================================
+// 5. EXPORT FINAL
+// ======================================================
+//
+
+module.exports = {
+    getDb: jest.fn(() => mockDb),
+    mockUsers // Exporta mockUsers para userController.test.js
+};

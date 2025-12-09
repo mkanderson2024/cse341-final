@@ -124,6 +124,34 @@ This project includes interactive API documentation using Swagger UI.
 - Swagger-ui-express
 - Swagger-autogen
 
+
+## Testing
+
+Testing and Mocks
+All tests are written using the Jest framework and can be executed using npm test.  Changes made in the project structure, specifically routing the database access through server.js in order to have supertest running
+
+To ensure fast, reliable, and isolated testing (Unit and Integration), this project utilizes Jest's manual mock system located in the __mocks__ directory.
+
+Database Mocking (__mocks__/config/db.js)
+We use a custom mock for the MongoDB connection module (config/db.js). This approach achieves test isolation by ensuring that no test executes queries against a live external database.
+
+Purpose: The mock simulates the behavior of the MongoDB driver's methods (e.g., db.collection().find(), .findOne(), .insertOne(), .aggregate()) and controls the data flow.
+
+Behavior: Instead of connecting to a server, the mock returns predefined data (mockUsers, mockOrders) for success scenarios or throws simulated errors for failure scenarios (e.g., status 500 DB errors).
+
+Key Mocked Methods:
+
+getDb().collection(name)
+
+Methods requiring chaining (e.g., .find().toArray() and .aggregate().toArray()) are handled by custom cursor mocks (mockCursorReturn) to maintain the chaining syntax used by the controllers.
+
+## Technologies Used for Testing 
+- Jes
+- Supertest
+
+
+## Mocks 
+- Jest's manual mock system
 ## Authors
 
 - Michael Anderson

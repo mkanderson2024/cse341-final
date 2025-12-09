@@ -76,7 +76,7 @@ const createAudio = async (req, res) => {
       );
     }
 
-    if (req.body.type === "audiodrama" && newBookId) {
+    if (req.body.type === "audiodrama" && BookId) { //replaced newBookId for bookId
       return res.status(400).json({ 
         message: "Audiodramas cannot be linked to a book" 
       });
