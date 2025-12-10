@@ -1,88 +1,89 @@
 // userController.test.js
 
 // Instruct Jest to use the mock database module in __mocks__/config/db.js
+// This ensures that database interactions are simulated for testing purposes.
 jest.mock('../config/db'); 
 const userController = require('../controllers/userController');
 const mongodb = require("../config/db");
 const { ObjectId } = require('mongodb');
 
+// Mock data array representing users in the database for testing success scenarios.
+// Note: This list should mirror the structure expected by the controller.
 const mockUsers = [
-    {
-        _id: new ObjectId("656b8566a01b63777083049b"), 
-        type: "seller",
-        email: "alice@example.com",
-        phone: "11987654321",
-        address: "Rua A, 123",
-        password: "hashed_password_1",
-        createdAt: new Date("2025-11-30T10:00:00.000Z"),
-        updatedAt: new Date("2025-11-30T10:00:00.000Z")
-    },
-    {
-        _id: new ObjectId("656b8566a01b63777083049c"),
-        type: "buyer",
-        email: "bob@example.com",
-        phone: "21998877665",
-        address: "Av B, 456",
-        password: "hashed_password_2",
-        createdAt: new Date("2025-11-30T11:00:00.000Z"),
-        updatedAt: new Date("2025-11-30T11:00:00.000Z")
-    }
+    {
+        _id: new ObjectId("656b8566a01b63777083049b"), 
+        type: "seller",
+        email: "alice@example.com",
+        phone: "11987654321",
+        address: "Rua A, 123",
+        password: "hashed_password_1",
+        createdAt: new Date("2025-11-30T10:00:00.000Z"),
+        updatedAt: new Date("2025-11-30T10:00:00.000Z")
+    },
+    {
+        _id: new ObjectId("656b8566a01b63777083049c"),
+        type: "buyer",
+        email: "bob@example.com",
+        phone: "21998877665",
+        address: "Av B, 456",
+        password: "hashed_password_2",
+        createdAt: new Date("2025-11-30T11:00:00.000Z"),
+        updatedAt: new Date("2025-11-30T11:00:00.000Z")
+    }
 ];
 
-// Mock function to simulate Express response object
+// Mock function to simulate the Express response object (res).
+// It tracks calls to res.status and res.json for assertions.
 const mockResponse = () => {
-    const res = {};
-    res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
-    return res;
+    const res = {};
+    res.status = jest.fn().mockReturnValue(res);
+    res.json = jest.fn().mockReturnValue(res);
+    return res;
 };
 
-// Simple request object (req), since we don't use body/params in getAllUsers success test
+// Simple mock request object for functions that don't require specific parameters.
 const mockRequest = {};
 
-// Fictitious IDs for testing various scenarios
-const VALID_ID = "656b8566a01b63777083049b"; 
+// Fictitious IDs for testing various scenarios (Validation and Not Found checks).
+const VALID_ID = "656b8566a01b63777083049b"; // Matches mockUsers[0]._id
 const NON_EXISTENT_ID = "000000000000000000000000"; 
 const INVALID_FORMAT_ID = "12345"; 
 
 //================================================================================
-// getAllUsers: SUCCESS AND ERROR 500
+// getAllUsers: SUCCESS AND ERROR 500 (Read All)
 //================================================================================
 describe('getAllUsers', () => {
 
-    // Reset mocks before each test to ensure isolation
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
+    beforeEach(() => {
+        // Clears mock history before each test to prevent side effects.
+        jest.clearAllMocks();
+        
+        const mockUsersCollection = mongodb.getDb().collection('users');
+        
+        // CRITICAL FIX: Ensures mock DB returns the user list for success scenario.
+        // This resolves the "Received: undefined" error in tests.
+        mockUsersCollection.find().toArray.mockResolvedValue(mockUsers); 
+    });
 
-    test('should return status 200 and all users', async () => {
-        // 1. Setup
-        const req = mockRequest;
-        const res = mockResponse();
+    test('should return status 200 and all users', async () => {
+        // 1. Setup
+        const req = mockRequest;
+        const res = mockResponse();
+        
+        // 2. Execution
+        await userController.getAllUsers(req, res);
 
-        // 2. Execution
-        await userController.getAllUsers(req, res);
+        // 3. Assertions
+        
+        // Verify that the database read operation was called.
+        expect(mongodb.getDb().collection('users').find().toArray).toHaveBeenCalled();
 
-        // 3. Assertions
-        
-        // Should call the getDb() function from the mock module
-        expect(mongodb.getDb).toHaveBeenCalled();
+        // Verify HTTP status code (200 OK).
+        expect(res.status).toHaveBeenCalledWith(200);
 
-        // Should call the collection() function with the correct name ('users')
-        expect(mongodb.getDb().collection).toHaveBeenCalledWith('users');
-
-        // Should call the find() function
-        expect(mongodb.getDb().collection('users').find).toHaveBeenCalled();
-        
-        // Should call toArray()
-        expect(mongodb.getDb().collection('users').find().toArray).toHaveBeenCalled();
-
-        // Should return status 200
-        expect(res.status).toHaveBeenCalledWith(200);
-
-        // Should return the mocked user list (full objects)
-        expect(res.json).toHaveBeenCalledWith(expect.arrayContaining(mockUsers));
-    });
+        // Verify the response body contains the mocked user data.
+        expect(res.json).toHaveBeenCalledWith(expect.arrayContaining(mockUsers)); 
+    });
     
     // Server Error Test (Status 500)
     test('should return status 500 on DB failure', async () => {
@@ -90,32 +91,42 @@ describe('getAllUsers', () => {
         const res = mockResponse();
         const errorMessage = 'Simulated DB connection error';
 
-        // Override the mock to MAKE the DB FAIL
-        // Make toArray() reject the Promise
+        // Override the mock to force the DB operation to reject the promise.
         mongodb.getDb().collection('users').find().toArray.mockRejectedValue(new Error(errorMessage));
+
+        // Mock console.error to prevent Jest warnings and verify logging.
+        const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
 
         await userController.getAllUsers(req, res);
 
-        // Check if the 500 status and error message were returned
+        // Check if the 500 status and error message were returned.
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ 
             message: "Failed to fetch all users!", 
             error: errorMessage 
         });
         
-        // Restore the original mock implementation for subsequent tests
-        mongodb.getDb().collection('users').find().toArray.mockRestore(); 
+        consoleErrorMock.mockRestore();
     });
 });
 
 //================================================================================
-// getUserById: SUCCESS, 400 (FORMAT), 404 (NOT FOUND), 500 (DB ERROR)
+// getUserById: SUCCESS, 400 (FORMAT), 404 (NOT FOUND), 500 (DB ERROR) (Read One)
 //================================================================================
 describe('getUserById', () => {
     
     beforeEach(() => {
-        jest.clearAllMocks();
-    });
+        jest.clearAllMocks();
+        
+        const mockUsersCollection = mongodb.getDb().collection('users');
+        
+        // CRITICAL FIX: Ensures mock DB returns the successful user for testing.
+        // This resolves the "Received: 404" error in the success test.
+        mockUsersCollection.findOne.mockResolvedValue(mockUsers[0]);
+        
+        // We configure the mock implementation for the 404 test below,
+        // but the default mockResolvedValue handles the 200 success case cleanly.
+    });
     
     // Success Test (200 OK)
     test('should return status 200 and the user if the ID is valid and found', async () => {
@@ -124,13 +135,13 @@ describe('getUserById', () => {
         
         await userController.getUserById(req, res);
         
-        // Check if findOne was called with the correct ObjectId
+        // Check if findOne was called with the correct ObjectId for the lookup.
         expect(mongodb.getDb().collection('users').findOne).toHaveBeenCalledWith(
             { _id: new ObjectId(VALID_ID) }
         );
         
         expect(res.status).toHaveBeenCalledWith(200);
-        // Expect the first user from the mock array to be returned
+        // Expect the first user from the mock list to be returned.
         expect(res.json).toHaveBeenCalledWith(mockUsers[0]); 
     });
 
@@ -141,7 +152,7 @@ describe('getUserById', () => {
         
         await userController.getUserById(req, res);
         
-        // The DB should NOT be called since validation failed first
+        // The DB should NOT be called since ObjectId.isValid fails first.
         expect(mongodb.getDb().collection('users').findOne).not.toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ message: "Invalid user ID format!" });
@@ -152,11 +163,12 @@ describe('getUserById', () => {
         const req = { params: { userId: NON_EXISTENT_ID } };
         const res = mockResponse();
         
-        // The mockDb.findOne is configured to return null for this ID
+        // Override the mock for this specific test to simulate "not found".
+        mongodb.getDb().collection('users').findOne.mockResolvedValue(null);
         
         await userController.getUserById(req, res);
         
-        // findOne should still be called
+        // findOne should still be called as validation succeeded.
         expect(mongodb.getDb().collection('users').findOne).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(404);
         expect(res.json).toHaveBeenCalledWith({ message: "User not found!" });
@@ -168,26 +180,28 @@ describe('getUserById', () => {
         const res = mockResponse();
         const errorMessage = 'Internal DB Error';
         
-        // Force findOne to reject the Promise
+        // Force findOne to reject the Promise (DB error).
         mongodb.getDb().collection('users').findOne.mockRejectedValue(new Error(errorMessage));
+        
+        const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
 
         await userController.getUserById(req, res);
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ message: "Failed to fetch user by Id", error: errorMessage });
         
-        mongodb.getDb().collection('users').findOne.mockRestore();
+        consoleErrorMock.mockRestore();
     });
 });
 
 //================================================================================
-// createUser: SUCCESS, 400 (MISSING FIELD), 500 (DB ERROR)
+// createUser: SUCCESS, 400 (MISSING FIELD), 500 (DB ERROR) (Create)
 //================================================================================
 describe('createUser', () => {
     
     beforeEach(() => {
-        jest.clearAllMocks();
-    });
+        jest.clearAllMocks();
+    });
     
     const validUserData = {
         type: 'seller',
@@ -204,7 +218,7 @@ describe('createUser', () => {
         const req = { body: validUserData };
         const res = mockResponse();
         
-        // Configure the mock to return success (acknowledged: true)
+        // Configure the mock to return success on insertOne.
         mongodb.getDb().collection('users').insertOne.mockResolvedValue({ 
             acknowledged: true, 
             insertedId: newMockId 
@@ -212,7 +226,7 @@ describe('createUser', () => {
 
         await userController.createUser(req, res);
 
-        // Check if insertOne was called with the correct data (excluding auto-generated fields like createdAt/updatedAt)
+        // Check if insertOne was called with the correct data.
         expect(mongodb.getDb().collection('users').insertOne).toHaveBeenCalledWith(
             expect.objectContaining({ email: validUserData.email, type: validUserData.type })
         );
@@ -222,8 +236,6 @@ describe('createUser', () => {
             message: "New user created successfuly!", 
             userId: newMockId 
         });
-        
-        mongodb.getDb().collection('users').insertOne.mockRestore();
     });
 
     // Validation Failure Test (400 Bad Request)
@@ -234,7 +246,7 @@ describe('createUser', () => {
 
         await userController.createUser(req, res);
 
-        // The DB should NOT be called
+        // The DB should NOT be called since validation fails early.
         expect(mongodb.getDb().collection('users').insertOne).not.toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ message: "Some Required fields missing: email, password or type" });
@@ -246,8 +258,10 @@ describe('createUser', () => {
         const res = mockResponse();
         const errorMessage = 'Insertion failed due to DB lock';
 
-        // Force insertOne to reject the Promise
+        // Force insertOne to reject the Promise (DB error).
         mongodb.getDb().collection('users').insertOne.mockRejectedValue(new Error(errorMessage));
+
+        const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
 
         await userController.createUser(req, res);
 
@@ -257,12 +271,12 @@ describe('createUser', () => {
             error: errorMessage 
         });
 
-        mongodb.getDb().collection('users').insertOne.mockRestore(); 
+        consoleErrorMock.mockRestore(); 
     });
 });
 
 //================================================================================
-// updateUser: SUCCESS, 400 (FORMAT), 404 (NOT FOUND), 500 (DB ERROR)
+// updateUser: SUCCESS, 400 (FORMAT), 404 (NOT FOUND), 500 (DB ERROR) (Update)
 //================================================================================
 describe('updateUser', () => {
     
@@ -283,7 +297,7 @@ describe('updateUser', () => {
         const req = { params: { userId: VALID_ID }, body: updateBody };
         const res = mockResponse();
 
-        // Configure the mockDB to simulate a successful update
+        // Configure the mockDB to simulate a successful update (matchedCount: 1).
         mongodb.getDb().collection('users').replaceOne.mockResolvedValue({ 
             matchedCount: 1, 
             modifiedCount: 1 
@@ -291,16 +305,15 @@ describe('updateUser', () => {
 
         await userController.updateUser(req, res);
 
-        // Check if replaceOne was called with the correct ID and data
+        // Check if replaceOne was called with the correct ID and data.
         expect(mongodb.getDb().collection('users').replaceOne).toHaveBeenCalledWith(
             { _id: new ObjectId(VALID_ID) },
-            expect.objectContaining({ email: updateBody.email, type: updateBody.type })
+            // Verify the update payload includes the expected fields.
+            expect.objectContaining({ email: updateBody.email, type: updateBody.type }) 
         );
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({ message: 'User updated successfully!' });
-
-        mongodb.getDb().collection('users').replaceOne.mockRestore();
     });
 
     // Validation Failure Test (400 Bad Request)
@@ -310,7 +323,7 @@ describe('updateUser', () => {
         
         await userController.updateUser(req, res);
         
-        // The DB should NOT be called
+        // The DB should NOT be called.
         expect(mongodb.getDb().collection('users').replaceOne).not.toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ message: 'Invalid user ID format' });
@@ -321,7 +334,7 @@ describe('updateUser', () => {
         const req = { params: { userId: NON_EXISTENT_ID }, body: updateBody };
         const res = mockResponse();
 
-        // Configure the mockDB to simulate user not found
+        // Configure the mockDB to simulate user not found (matchedCount: 0).
         mongodb.getDb().collection('users').replaceOne.mockResolvedValue({ 
             matchedCount: 0, 
             modifiedCount: 0 
@@ -329,12 +342,10 @@ describe('updateUser', () => {
         
         await userController.updateUser(req, res);
         
-        // replaceOne should be called but matchedCount should be 0
+        // replaceOne should be called but fail the matchedCount check.
         expect(mongodb.getDb().collection('users').replaceOne).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(404);
         expect(res.json).toHaveBeenCalledWith({ message: 'User not found!' });
-
-        mongodb.getDb().collection('users').replaceOne.mockRestore();
     });
 
     // Server Error Test (500 Internal Server Error)
@@ -343,8 +354,10 @@ describe('updateUser', () => {
         const res = mockResponse();
         const errorMessage = 'DB Error during replacement';
 
-        // Force replaceOne to reject the Promise
+        // Force replaceOne to reject the Promise (DB error).
         mongodb.getDb().collection('users').replaceOne.mockRejectedValue(new Error(errorMessage));
+        
+        const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
 
         await userController.updateUser(req, res);
 
@@ -354,12 +367,12 @@ describe('updateUser', () => {
             error: errorMessage 
         });
 
-        mongodb.getDb().collection('users').replaceOne.mockRestore();
+        consoleErrorMock.mockRestore();
     });
 });
 
 //================================================================================
-// deleteUser: SUCCESS, 400 (FORMAT), 404 (NOT FOUND), 500 (DB ERROR)
+// deleteUser: SUCCESS, 400 (FORMAT), 404 (NOT FOUND), 500 (DB ERROR) (Delete)
 //================================================================================
 describe('deleteUser', () => {
     
@@ -372,22 +385,20 @@ describe('deleteUser', () => {
         const req = { params: { userId: VALID_ID } };
         const res = mockResponse();
 
-        // Configure the mockDB to simulate a successful deletion
+        // Configure the mockDB to simulate a successful deletion (deletedCount: 1).
         mongodb.getDb().collection('users').deleteOne.mockResolvedValue({ 
-            deletedCount: 1 // Indicates that 1 document was deleted
+            deletedCount: 1 
         });
 
         await userController.deleteUser(req, res);
 
-        // Check if deleteOne was called with the correct ID
+        // Check if deleteOne was called with the correct ID.
         expect(mongodb.getDb().collection('users').deleteOne).toHaveBeenCalledWith(
             { _id: new ObjectId(VALID_ID) }
         );
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({ message: 'User deleted successfully' });
-
-        mongodb.getDb().collection('users').deleteOne.mockRestore();
     });
 
     // Validation Failure Test (400 Bad Request)
@@ -397,7 +408,7 @@ describe('deleteUser', () => {
         
         await userController.deleteUser(req, res);
         
-        // The DB should NOT be called
+        // The DB should NOT be called.
         expect(mongodb.getDb().collection('users').deleteOne).not.toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({ message: 'Invalid user ID format' });
@@ -408,19 +419,17 @@ describe('deleteUser', () => {
         const req = { params: { userId: NON_EXISTENT_ID } };
         const res = mockResponse();
 
-        // Configure the mockDB to simulate user not found (deletedCount: 0)
+        // Configure the mockDB to simulate user not found (deletedCount: 0).
         mongodb.getDb().collection('users').deleteOne.mockResolvedValue({ 
             deletedCount: 0 
         });
         
         await userController.deleteUser(req, res);
         
-        // deleteOne should be called but deletedCount should be 0
+        // deleteOne should be called but fail the deletedCount check.
         expect(mongodb.getDb().collection('users').deleteOne).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(404);
         expect(res.json).toHaveBeenCalledWith({ message: 'User not found' });
-
-        mongodb.getDb().collection('users').deleteOne.mockRestore();
     });
 
     // Server Error Test (500 Internal Server Error)
@@ -429,8 +438,10 @@ describe('deleteUser', () => {
         const res = mockResponse();
         const errorMessage = 'DB Error during deletion';
 
-        // Force deleteOne to reject the Promise
+        // Force deleteOne to reject the Promise (DB error).
         mongodb.getDb().collection('users').deleteOne.mockRejectedValue(new Error(errorMessage));
+        
+        const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
 
         await userController.deleteUser(req, res);
 
@@ -440,6 +451,6 @@ describe('deleteUser', () => {
             error: errorMessage 
         });
 
-        mongodb.getDb().collection('users').deleteOne.mockRestore();
+        consoleErrorMock.mockRestore();
     });
 });

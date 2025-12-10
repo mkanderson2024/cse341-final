@@ -90,7 +90,7 @@ const getBookById = async (req, res) => {
       }
     ]).toArray();
 
-    if (!book) {
+    if (!book || book.length === 0) {//verification if the array is empty by Sergio Pontes
       return res.status(404).json({ message: 'Book not found' });
     }
     
