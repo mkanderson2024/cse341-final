@@ -57,14 +57,14 @@ const createAudio = async (req, res) => {
     }
     const audio = {
       title: req.body.title,
+      bookId: newBookId ? new ObjectId(newBookId) : null,
       type: req.body.type,
       author: req.body.author,
       voiceActor: req.body.voiceActor,
       recordingStudio: req.body.recordingStudio,
       genre: req.body.genre,
       audioFormat: req.body.audioFormat,
-      time: req.body.time,
-      bookId: bookId ? new ObjectId(bookId) : null
+      time: req.body.time
     };
     const result = await db.collection(collectionName).insertOne(audio);
 
@@ -128,6 +128,7 @@ const updateAudio = async (req, res) => {
 
     const updatedAudio = {
       _id: existingAudio._id, // Preserve the original _id
+      bookId: newBookId ? new ObjectId(newBookId) : null,
       title: req.body.title,
       author: req.body.author,
       voiceActor: req.body.voiceActor,
@@ -135,8 +136,7 @@ const updateAudio = async (req, res) => {
       genre: req.body.genre,
       audioFormat: req.body.audioFormat,
       time: req.body.time,
-      type: req.body.type,
-      bookId: newBookId ? new ObjectId(newBookId) : null
+      type: req.body.type
     };
     await db.collection(collectionName).updateOne(
       { _id: new ObjectId(audioId) },

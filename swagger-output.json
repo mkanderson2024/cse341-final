@@ -163,13 +163,14 @@
             "schema": {
               "type": "object",
               "properties": {
+                "bookId": { "example": "1ase32sf15e"},
                 "title": { "example": "The Hobbit" },
-                "author": { "example": "J.R.R. Tolkien" },
+                "author": { "example": "JRR Tolkien" },
                 "voiceActor": { "example": "Rob Inglis" },
                 "recordingStudio": { "example": "BBC" },
                 "genre": { "example": "Fantasy" },
-                "audioFormat": { "example": "MP3" },
-                "time": { "example": "11:30:00" }
+                "audioFormat": { "example": "mp3" },
+                "time": { "example": "11:30" }
               }
             }
           }
@@ -212,13 +213,14 @@
             "schema": {
               "type": "object",
               "properties": {
+                "bookId": { "example": "1ase32sf15e"},
                 "title": { "example": "The Lord of the Rings" },
-                "author": { "example": "J.R.R. Tolkien" },
+                "author": { "example": "JRR Tolkien" },
                 "voiceActor": { "example": "Rob Inglis" },
                 "recordingStudio": { "example": "BBC" },
                 "genre": { "example": "Fantasy" },
-                "audioFormat": { "example": "MP3" },
-                "time": { "example": "12:00:00" }
+                "audioFormat": { "example": "mp3" },
+                "time": { "example": "12:00" }
               }
             }
           }
